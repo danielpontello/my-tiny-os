@@ -1,37 +1,27 @@
 ;
-; A simple boot sector that prints a message to the screen
+; Prints a string using a function
 ;
+[org 0x7c00]
 
-mov ah, 0x0e ; int 10/ah = 0E -> scrolling teleype
+    mov bx, HELLO_MSG
+    call print_string
 
-mov al, 'H'
-int 0x10
-mov al, 'e'
-int 0x10
-mov al, 'l'
-int 0x10
-mov al, 'l'
-int 0x10
-mov al, 'o'
-int 0x10
-mov al, ' '
-int 0x10
-mov al, 'W'
-int 0x10
-mov al, 'o'
-int 0x10
-mov al, 'r'
-int 0x10
-mov al, 'l'
-int 0x10
-mov al, 'd'
-int 0x10
+    mov bx, GOODBYE_MSG
+    call print_string
 
-jmp $
+    jmp $
+
+%include "print_string.asm"
+
+; Data
+HELLO_MSG:
+    db 'Hello, World!', 0 ; <-- Null-terminating!
+
+GOODBYE_MSG:
+    db 'Goodbye!', 0
 
 ; 
 ; Padding and magic BIOS number
 ;
 times 510-($-$$) db 0
-
 dw 0xAA55
