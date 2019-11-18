@@ -1,8 +1,11 @@
 #include <cpu/isr.h>
+#include <kernel/util.h>
 
 #include "keyboard.h"
 #include "ports.h"
 #include "screen.h"
+
+void print_letter(u8 scancode);
 
 static void keyboard_callback(registers_t regs)
 {

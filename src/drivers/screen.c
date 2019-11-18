@@ -9,6 +9,10 @@ int get_offset(int col, int row);
 int get_offset_row(int offset);
 int get_offset_col(int offset);
 
+/**********************************************************
+ * Public Kernel API functions                            *
+ **********************************************************/
+
 /**
  * Print a message on the specified location
  * If col, row, are negative, we will use the current offset
@@ -36,11 +40,6 @@ void kprint_at(char *message, int col, int row) {
 
 void kprint(char *message) {
     kprint_at(message, -1, -1);
-}
-
-void kprintln(char *message) {
-    kprint_at(message, -1, -1);
-    kprint_at('\n', -1, -1);
 }
 
 
@@ -74,12 +73,14 @@ int print_char(char c, int col, int row, char attr) {
 
     if (c == '\n') {
         row = get_offset_row(offset);
-        offset = get_offset(0, row+1);
+        offset = get_offset(79, row);
     } else {
         vidmem[offset] = c;
         vidmem[offset+1] = attr;
-        offset += 2;
     }
+    offset += 2;
+    offset = handle_scrolling(offset);
+    
     set_cursor_offset(offset);
     return offset;
 }
@@ -117,7 +118,41 @@ void clear_screen() {
     set_cursor_offset(get_offset(0, 0));
 }
 
+/*  Advance  the  text  cursor , scrolling  the  video  buffer  if  necessary. */
+int handle_scrolling(int cursor_offset) 
+{
+    // If the  cursor  is  within  the  screen , return  it  unmodified.
+    if (cursor_offset  < MAX_ROWS*MAX_COLS *2) 
+    {
+        return  cursor_offset;
+    }
+
+    /*  Shuffle  the  rows  back  one. */
+    int i;
+    for (i=1; i<MAX_ROWS; i++) 
+    {
+        memory_copy(get_offset(0, i) + VIDEO_ADDRESS, 
+                    get_offset(0, i-1) + VIDEO_ADDRESS,
+                    MAX_COLS *2);
+    }
+
+    /*  Blank  the  last  line by  setting  all  bytes  to 0 */
+    char* last_line = get_offset (0,MAX_ROWS -1) + VIDEO_ADDRESS;
+    for (i=0; i < MAX_COLS *2; i++) 
+    {
+        last_line[i] = 0;
+    }
+
+    // Move  the  offset  back  one row , such  that it is now on the  last
+    // row , rather  than  off the  edge of the  screen.
+    cursor_offset  -= 2* MAX_COLS;
+
+    //  Return  the  updated  cursor  position.
+    return  cursor_offset;
+}
+
 
 int get_offset(int col, int row) { return 2 * (row * MAX_COLS + col); }
 int get_offset_row(int offset) { return offset / (2 * MAX_COLS); }
 int get_offset_col(int offset) { return (offset - (get_offset_row(offset)*2*MAX_COLS))/2; }
+
