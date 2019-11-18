@@ -1,5 +1,7 @@
+#include <cpu/ports.h>
+#include <libc/mem.h>
+
 #include "screen.h"
-#include "ports.h"
 
 /* Declaration of private functions */
 int get_cursor_offset();
@@ -40,6 +42,13 @@ void kprint_at(char *message, int col, int row) {
 
 void kprint(char *message) {
     kprint_at(message, -1, -1);
+}
+
+void kprint_backspace() {
+    int offset = get_cursor_offset()-2;
+    int row = get_offset_row(offset);
+    int col = get_offset_col(offset);
+    print_char(0x08, col, row, WHITE_ON_BLACK);
 }
 
 

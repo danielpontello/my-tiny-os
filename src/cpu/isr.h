@@ -55,7 +55,6 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-
 #define IRQ0 32
 #define IRQ1 33
 #define IRQ2 34
@@ -82,6 +81,7 @@ typedef struct {
 
 void isr_install();
 void isr_handler(registers_t r);
+void irq_install();
 
 typedef void (*isr_t)(registers_t);
 void register_interrupt_handler(u8 n, isr_t handler);

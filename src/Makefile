@@ -1,7 +1,11 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 
 OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o} 
+
+CC = gcc
+CFLAGS = -g -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs \
+		 -I'./'
 
 all: os-image
 
@@ -19,7 +23,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 
 # build kernel object file
 %.o: %.c ${HEADERS}
-	gcc -m32 -I'./' -ffreestanding -fno-pie -c $< -o $@
+	${CC} ${CFLAGS} -ffreestanding -fno-pie -c $< -o $@
 
 # build kernel_entry
 %.o: %.asm
@@ -30,4 +34,4 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 
 clean:
 	rm -rf *.bin *.dis *.o os-image *.map
-	rm -rf kernel/*.o boot/*.bin drivers/*.o cpu/*.o
+	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o libc/*.o

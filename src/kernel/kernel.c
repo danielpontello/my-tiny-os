@@ -1,18 +1,24 @@
-#include <drivers/screen.h>
+
 #include <cpu/isr.h>
-#include <cpu/idt.h>
+#include <drivers/screen.h>
+#include <libc/string.h>
 
-#include "util.h"
+#include "kernel.h"
 
-void main() 
-{
+void main() {
     isr_install();
+    irq_install();
 
-    asm volatile("sti");
-    init_timer(50);
-    /* Comment out the timer IRQ handler to read
-     * the keyboard IRQs easier */
-    init_keyboard();
+    kprint("Welcome to the OS!\n"
+        "Type END to halt the CPU\n> ");
+}
 
-    clear_screen();
+void user_input(char *input) {
+    if (strcmp(input, "END") == 0) {
+        kprint("Stopping the CPU. Bye!\n");
+        asm volatile("hlt");
+    }
+    kprint("You said: ");
+    kprint(input);
+    kprint("\n> ");
 }
