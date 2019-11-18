@@ -48,7 +48,8 @@ void kprint_backspace() {
     int offset = get_cursor_offset()-2;
     int row = get_offset_row(offset);
     int col = get_offset_col(offset);
-    print_char(0x08, col, row, WHITE_ON_BLACK);
+    print_char(0x20, col, row, WHITE_ON_BLACK);
+    set_cursor_offset(offset);
 }
 
 

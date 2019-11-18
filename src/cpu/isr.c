@@ -1,4 +1,5 @@
 #include <drivers/screen.h>
+#include <drivers/keyboard.h>
 #include <cpu/ports.h>
 #include <libc/string.h>
 
