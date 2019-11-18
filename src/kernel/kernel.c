@@ -1,7 +1,7 @@
+#include <drivers/screen.h>
+
 void main()
 {
-    // pointer to char in video memory
-    char* video_memory = (char*) 0xb8000;
-
-    *video_memory = 'X';
+    clear_screen();
+    kprint("Hello World!");
 }

@@ -19,7 +19,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 
 # build kernel object file
 %.o: %.c ${HEADERS}
-	gcc -m32 -ffreestanding -fno-pie -c $< -o $@
+	gcc -m32 -I'./' -ffreestanding -fno-pie -c $< -o $@
 
 # build kernel_entry
 %.o: %.asm
