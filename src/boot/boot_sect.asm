@@ -18,11 +18,11 @@ KERNEL_OFFSET equ 0x1000
     jmp $
 
 ; include useful routines
-%include "print/print_string.asm"
-%include "print/print_string_pm.asm"
-%include "core/gdt.asm"
-%include "core/switch_to_pm.asm"
-%include "io/disk_load.asm"
+%include "print_string.asm"
+%include "print_string_pm.asm"
+%include "gdt.asm"
+%include "switch_to_pm.asm"
+%include "disk_load.asm"
 
 [bits 16]
 
