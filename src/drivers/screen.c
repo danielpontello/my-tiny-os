@@ -1,5 +1,6 @@
 #include <cpu/ports.h>
 #include <libc/mem.h>
+#include <stdint.h>
 
 #include "screen.h"
 
@@ -10,6 +11,7 @@ int print_char(char c, int col, int row, char attr);
 int get_offset(int col, int row);
 int get_offset_row(int offset);
 int get_offset_col(int offset);
+int handle_scrolling(int cursor_offset);
 
 /**********************************************************
  * Public Kernel API functions                            *

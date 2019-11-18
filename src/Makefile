@@ -4,7 +4,7 @@ HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o} 
 
 CC = gcc
-CFLAGS = -g -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs \
+CFLAGS = -g -ffreestanding -Wall -Wextra -fno-exceptions -m32 -fno-pie \
 		 -I'./'
 
 all: os-image
@@ -23,7 +23,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 
 # build kernel object file
 %.o: %.c ${HEADERS}
-	${CC} ${CFLAGS} -ffreestanding -fno-pie -c $< -o $@
+	${CC} ${CFLAGS} -c $< -o $@
 
 # build kernel_entry
 %.o: %.asm
