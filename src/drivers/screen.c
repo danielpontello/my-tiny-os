@@ -38,6 +38,11 @@ void kprint(char *message) {
     kprint_at(message, -1, -1);
 }
 
+void kprintln(char *message) {
+    kprint_at(message, -1, -1);
+    kprint_at('\n', -1, -1);
+}
+
 
 /**********************************************************
  * Private kernel functions                               *
