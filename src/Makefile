@@ -11,7 +11,7 @@ all: os-image
 
 # runs the system in an emulator
 run: all
-	qemu-system-i386 -fda os-image -boot a
+	qemu-system-i386 -serial stdio -fda os-image -boot a
 
 # combines the boot sector with the kernel
 os-image: boot/boot_sect.bin kernel.bin

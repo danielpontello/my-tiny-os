@@ -1,5 +1,6 @@
 #include <cpu/isr.h>
 #include <drivers/screen.h>
+#include <drivers/serial.h>
 #include <libc/string.h>
 #include <libc/mem.h>
 
@@ -10,6 +11,12 @@ void kernel_main() {
     irq_install();
 
     clear_screen();
+    kprint("Initializing serial port...\n");
+    init_serial();
+
+    kprint("Testing serial port...\n");
+    print_serial("Serial port working!");
+
     kprint("Welcome to the OS!\n"
         "Type HELP for help\n> ");
 }
